@@ -1,0 +1,1176 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ESP8266 WI FI</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: white;
+    color: #111;
+    padding: 18px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    border-bottom: 1px solid #ddd;
+    padding: 12px 0 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-icon {
+    font-size: 40px;
+}
+
+.logo h2 {
+    font-size: 23px;
+    font-weight: 800;
+}
+
+.header-right {
+    display: flex;
+    gap: 12px;
+}
+
+.header-right button {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-size: 20px;
+}
+
+main {
+    max-width: 950px;
+    margin: auto;
+}
+
+h2.section-title {
+    text-align: center;
+    margin: 30px 0 20px;
+}
+
+.main-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+.mode-card {
+    background: white;
+    border: 2px solid #e5e5e5;
+    border-radius: 16px;
+    padding: 18px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.mode-card:hover,
+.mode-card.active {
+    border-color: #111;
+    background: #f5f5f5;
+    transform: translateY(-3px);
+}
+
+.mode-image {
+    font-size: 55px;
+    margin-bottom: 12px;
+}
+
+.mode-card h3 {
+    font-size: 18px;
+}
+
+.bottom-controls {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin: 28px 0;
+}
+
+.bottom-controls button {
+    padding: 18px;
+    background: #111;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.page {
+    display: none;
+    margin-top: 25px;
+}
+
+.page.active {
+    display: block;
+}
+
+.control-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.control-heading h2 {
+    font-size: 22px;
+}
+
+.control-heading button,
+.small-btn {
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 9px;
+    padding: 10px 14px;
+    cursor: pointer;
+}
+
+.control-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.control-item {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 17px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    background: white;
+}
+
+.control-item:hover {
+    background: #f5f5f5;
+}
+
+.control-item strong {
+    font-size: 16px;
+}
+
+.control-item span {
+    font-size: 22px;
+}
+
+.connection-box {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 18px;
+    margin: 15px 0;
+}
+
+.connection-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 12px 0;
+}
+
+.switch {
+    width: 48px;
+    height: 26px;
+    appearance: none;
+    background: #bbb;
+    border-radius: 30px;
+    position: relative;
+    cursor: pointer;
+}
+
+.switch:checked {
+    background: #111;
+}
+
+.switch:before {
+    content: "";
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: .2s;
+}
+
+.switch:checked:before {
+    left: 25px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 15px;
+}
+
+.action-buttons button {
+    border: none;
+    border-radius: 9px;
+    padding: 12px 18px;
+    background: #111;
+    color: white;
+    cursor: pointer;
+}
+
+.action-buttons .light {
+    background: #eee;
+    color: #111;
+}
+
+.custom-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.custom-button {
+    border: 1px solid #ddd;
+    border-radius: 13px;
+    background: white;
+    min-height: 110px;
+    cursor: pointer;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+}
+
+.custom-button:hover {
+    border-color: #111;
+    background: #f7f7f7;
+}
+
+.custom-button .symbol {
+    font-size: 30px;
+}
+
+.add-button {
+    border: 2px dashed #999;
+    border-radius: 13px;
+    background: white;
+    font-size: 32px;
+    cursor: pointer;
+    min-height: 110px;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 7px 0 14px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+textarea {
+    min-height: 80px;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+.modal-content {
+    background: white;
+    padding: 22px;
+    width: 100%;
+    max-width: 420px;
+    max-height: 90vh;
+    overflow-y: auto;
+    border-radius: 16px;
+}
+
+.modal-content h2 {
+    margin-bottom: 15px;
+}
+
+.icon-picker {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+}
+
+.icon-choice {
+    padding: 12px 3px;
+    border: 1px solid #ddd;
+    background: white;
+    border-radius: 8px;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.icon-choice.selected {
+    border: 2px solid black;
+    background: #eee;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.modal-actions button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: #111;
+    color: white;
+    cursor: pointer;
+    flex: 1;
+}
+
+.modal-actions .delete {
+    background: #d93636;
+}
+
+.status {
+    color: #555;
+    font-size: 13px;
+    margin-top: 8px;
+    overflow-wrap: anywhere;
+}
+
+#notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #111;
+    color: white;
+    padding: 13px 20px;
+    border-radius: 10px;
+    display: none;
+    z-index: 200;
+    max-width: 90%;
+    text-align: center;
+}
+
+#serialOutput {
+    background: #111;
+    color: #00ff75;
+    padding: 15px;
+    border-radius: 10px;
+    min-height: 120px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+footer {
+    text-align: center;
+    color: #777;
+    margin: 40px 0 15px;
+    font-size: 13px;
+}
+
+@media(max-width:550px) {
+    body { padding: 12px; }
+    .main-cards { gap: 8px; }
+    .mode-image { font-size: 38px; }
+    .mode-card h3 { font-size: 14px; }
+    .custom-grid { grid-template-columns: repeat(2,1fr); }
+    .logo h2 { font-size: 19px; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">
+        <div class="logo-icon">🚗ᛒ</div>
+        <h2>ESP8266 WI FI</h2>
+    </div>
+
+    <div class="header-right">
+        <button onclick="openSettings()" title="Settings">⚙️</button>
+        <button onclick="showNotification('Welcome to ESP8266 WI FI')" title="Notifications">🔔</button>
+    </div>
+</header>
+
+<main>
+
+<h2 class="section-title">Select Your Control Mode</h2>
+
+<div class="main-cards">
+
+    <div class="mode-card active" onclick="selectMode(this,'Basic')">
+        <div class="mode-image">🕹️</div>
+        <h3>Basic</h3>
+    </div>
+
+    <div class="mode-card" onclick="selectMode(this,'Advanced')">
+        <div class="mode-image">🤖</div>
+        <h3>Advanced</h3>
+    </div>
+
+    <div class="mode-card" onclick="selectMode(this,'Bot Pro')">
+        <div class="mode-image">🚘</div>
+        <h3>Bot Pro</h3>
+    </div>
+
+</div>
+
+<div class="bottom-controls">
+    <button onclick="showPage('sensorPage')">📡 Sensor Controls</button>
+    <button onclick="showPage('projectPage')">⚡ Project Controls</button>
+</div>
+
+<!-- BASIC CONTROL -->
+
+<section class="page active" id="basicPage">
+
+<div class="control-heading">
+    <h2>Basic Control</h2>
+    <button onclick="openConnection()">ᛒ Bluetooth / Wi-Fi</button>
+</div>
+
+<div class="control-list">
+
+    <div class="control-item" onclick="openDeviceControl()">
+        <strong>Device Control</strong><span>💡</span>
+    </div>
+
+    <div class="control-item" onclick="openRC()">
+        <strong>RC Car Control</strong><span>🚗</span>
+    </div>
+
+    <div class="control-item" onclick="openRGB()">
+        <strong>RGB Control</strong><span>🌈</span>
+    </div>
+
+    <div class="control-item" onclick="openText()">
+        <strong>Text Control</strong><span>📝</span>
+    </div>
+
+    <div class="control-item" onclick="openIoT()">
+        <strong>IoT Control</strong><span>🌐</span>
+    </div>
+
+    <div class="control-item" onclick="openSerial()">
+        <strong>Serial Monitor</strong><span>📟</span>
+    </div>
+
+</div>
+</section>
+
+<!-- DEVICE CONTROL -->
+
+<section class="page" id="devicePage">
+
+<div class="control-heading">
+    <h2>Device Control</h2>
+    <div>
+        <button onclick="openConnection()">ᛒ</button>
+        <button onclick="addNewButton()">＋</button>
+    </div>
+</div>
+
+<p class="status">Long press any button to customize its settings.</p>
+
+<div class="custom-grid" id="customGrid"></div>
+
+<div class="action-buttons">
+    <button class="light" onclick="showPage('basicPage')">← Back</button>
+</div>
+</section>
+
+<!-- RC CAR -->
+
+<section class="page" id="rcPage">
+<h2>RC Car Control</h2>
+
+<div style="text-align:center;margin:25px">
+    <div style="font-size:70px">🚗</div>
+    <p>Control your RC car</p>
+</div>
+
+<div class="custom-grid">
+    <button class="custom-button" onclick="sendCommand('FORWARD')">⬆️<br>Forward</button>
+    <button class="custom-button" onclick="sendCommand('STOP')">⏹️<br>Stop</button>
+    <button class="custom-button" onclick="sendCommand('BACKWARD')">⬇️<br>Backward</button>
+    <button class="custom-button" onclick="sendCommand('LEFT')">⬅️<br>Left</button>
+    <button class="custom-button" onclick="sendCommand('RIGHT')">➡️<br>Right</button>
+    <button class="custom-button" onclick="sendCommand('HORN')">📢<br>Horn</button>
+</div>
+<button class="small-btn" onclick="showPage('basicPage')">← Back</button>
+</section>
+
+<!-- RGB CONTROL -->
+
+<section class="page" id="rgbPage">
+<h2>RGB Control</h2>
+<label>Select Colour</label>
+<input type="color" id="rgbColor" value="#ff0000">
+
+<div class="action-buttons">
+    <button onclick="sendCommand('RGB:'+document.getElementById('rgbColor').value)">Set Colour</button>
+    <button class="light" onclick="sendCommand('RGB:OFF')">OFF</button>
+</div>
+<button class="small-btn" onclick="showPage('basicPage')">← Back</button>
+</section>
+
+<!-- TEXT CONTROL -->
+
+<section class="page" id="textPage">
+<h2>Text Control</h2>
+<label>Enter your message</label>
+<textarea id="textMessage" placeholder="Type your message here..."></textarea>
+<button class="small-btn" onclick="sendCommand('TEXT:'+document.getElementById('textMessage').value)">Send Message</button>
+<button class="small-btn" onclick="showPage('basicPage')">← Back</button>
+</section>
+
+<!-- IOT CONTROL -->
+
+<section class="page" id="iotPage">
+<h2>IoT Control</h2>
+<div class="connection-box">
+    <h3>Internet of Things</h3>
+    <p class="status">Connect your ESP8266 to your Wi-Fi network.</p>
+    <label>Device IP Address</label>
+    <input id="deviceIP" placeholder="192.168.4.1">
+    <button class="small-btn" onclick="saveSettings()">Save IP Address</button>
+    <button class="small-btn" onclick="sendCommand('STATUS')">Get Device Status</button>
+</div>
+<button class="small-btn" onclick="showPage('basicPage')">← Back</button>
+</section>
+
+<!-- SERIAL MONITOR -->
+
+<section class="page" id="serialPage">
+<h2>Serial Monitor</h2>
+<div id="serialOutput">ESP8266 Serial Monitor Ready...</div>
+<input id="serialInput" placeholder="Enter serial command">
+<div class="action-buttons">
+    <button onclick="sendCommand(document.getElementById('serialInput').value)">Send</button>
+    <button class="light" onclick="document.getElementById('serialOutput').textContent=''">Clear</button>
+</div>
+<button class="small-btn" onclick="showPage('basicPage')">← Back</button>
+</section>
+
+<!-- ADVANCED -->
+
+<section class="page" id="advancedPage">
+<h2>Advanced Control</h2>
+<div class="control-list">
+    <div class="control-item" onclick="openRGB()">🌈 RGB Lighting</div>
+    <div class="control-item" onclick="openIoT()">🌐 Wi-Fi Settings</div>
+    <div class="control-item" onclick="openSerial()">📟 Serial Monitor</div>
+    <div class="control-item" onclick="openDeviceControl()">⚙️ Custom Devices</div>
+</div>
+</section>
+
+<!-- BOT PRO -->
+
+<section class="page" id="botproPage">
+<h2>Bot Pro Control</h2>
+<div class="custom-grid">
+    <button class="custom-button" onclick="sendCommand('AUTO')">🤖<br>Auto Mode</button>
+    <button class="custom-button" onclick="sendCommand('MANUAL')">🎮<br>Manual Mode</button>
+    <button class="custom-button" onclick="sendCommand('FOLLOW')">👣<br>Follow Mode</button>
+    <button class="custom-button" onclick="sendCommand('AVOID')">🚧<br>Obstacle Avoidance</button>
+</div>
+</section>
+
+<!-- SENSOR CONTROLS -->
+
+<section class="page" id="sensorPage">
+<h2>Sensor Controls</h2>
+<div class="control-list">
+    <div class="control-item" onclick="sendCommand('READ:ULTRASONIC')">📡 Ultrasonic Sensor</div>
+    <div class="control-item" onclick="sendCommand('READ:IR')">🔴 IR Sensor</div>
+    <div class="control-item" onclick="sendCommand('READ:LDR')">☀️ Light Sensor</div>
+    <div class="control-item" onclick="sendCommand('READ:TEMP')">🌡️ Temperature Sensor</div>
+    <div class="control-item" onclick="sendCommand('READ:ALL')">📊 Read All Sensors</div>
+</div>
+<button class="small-btn" onclick="showPage('basicPage')">← Back</button>
+</section>
+
+<!-- PROJECT CONTROLS -->
+
+<section class="page" id="projectPage">
+<h2>Project Controls</h2>
+<div class="control-list">
+    <div class="control-item" onclick="sendCommand('PROJECT:START')">▶️ Start Project</div>
+    <div class="control-item" onclick="sendCommand('PROJECT:STOP')">⏹️ Stop Project</div>
+    <div class="control-item" onclick="sendCommand('PROJECT:RESET')">🔄 Reset Project</div>
+    <div class="control-item" onclick="sendCommand('PROJECT:STATUS')">📊 Project Status</div>
+</div>
+<button class="small-btn" onclick="showPage('basicPage')">← Back</button>
+</section>
+
+<!-- GOOGLE SHEETS -->
+
+<div class="connection-box" style="margin-top:30px">
+    <button class="small-btn" onclick="openSheet()">📊 Google Sheets</button>
+    <p class="status">Open your connected Google Sheets dashboard.</p>
+</div>
+
+<footer>
+    ESP8266 WI FI | Smart Device Control
+</footer>
+
+</main>
+
+<!-- CONNECTION MODAL -->
+
+<div class="modal" id="connectionModal">
+<div class="modal-content">
+<h2>Device Connection</h2>
+
+<div class="connection-row">
+    <strong>Bluetooth</strong>
+    <input class="switch" type="checkbox" id="bluetoothSwitch" onchange="connectionChanged('Bluetooth')">
+</div>
+
+<div class="connection-row">
+    <strong>Wi-Fi</strong>
+    <input class="switch" type="checkbox" id="wifiSwitch" onchange="connectionChanged('WiFi')">
+</div>
+
+<hr>
+
+<h3 style="margin-top:15px">Bluetooth Devices</h3>
+<div class="connection-row">
+    <span>Selected Device</span>
+    <button class="small-btn" onclick="scanBluetooth()">Scan 🔍</button>
+</div>
+
+<p id="bluetoothStatus" class="status">No device selected.</p>
+
+<button class="small-btn" onclick="getPairedDevices()">Show Available Paired Devices</button>
+
+<hr style="margin:15px 0">
+
+<h3>Wi-Fi Connection</h3>
+<input id="wifiName" placeholder="Wi-Fi Network Name">
+<input id="wifiPassword" type="password" placeholder="Wi-Fi Password">
+<input id="wifiEndpoint" placeholder="ESP8266 command URL (optional)">
+<button class="small-btn" onclick="connectWiFi()">Connect Wi-Fi</button>
+
+<div class="modal-actions">
+    <button onclick="closeModal('connectionModal')">Close</button>
+</div>
+</div>
+</div>
+
+<!-- BUTTON CUSTOMIZATION MODAL -->
+
+<div class="modal" id="editModal">
+<div class="modal-content">
+<h2>Customize Button</h2>
+
+<label>Button Name</label>
+<input id="editName" placeholder="Enter button name">
+
+<label>ON Command</label>
+<input id="editOn" placeholder="Example: LED_ON">
+
+<label>OFF Command</label>
+<input id="editOff" placeholder="Example: LED_OFF">
+
+<label>Select Icon</label>
+<div class="icon-picker" id="iconPicker"></div>
+
+<div class="modal-actions">
+    <button class="delete" onclick="deleteButton()">Delete</button>
+    <button onclick="saveButton()">Save</button>
+</div>
+</div>
+</div>
+
+<!-- SETTINGS MODAL -->
+
+<div class="modal" id="settingsModal">
+<div class="modal-content">
+<h2>⚙️ Settings</h2>
+
+<label>Website Name</label>
+<input id="siteName" value="ESP8266 WI FI">
+
+<label>Google Sheets URL</label>
+<input id="sheetURL" placeholder="Paste Google Sheets or dashboard URL">
+
+<label>Wi-Fi Command Endpoint</label>
+<input id="settingsEndpoint" placeholder="http://192.168.4.1">
+
+<div class="modal-actions">
+    <button onclick="saveSettings()">Save Settings</button>
+    <button onclick="closeModal('settingsModal')">Close</button>
+</div>
+</div>
+</div>
+
+<div id="notification"></div>
+
+<script>
+
+// PAGE NAVIGATION
+
+function showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(pageId).classList.add('active');
+}
+
+function selectMode(element, mode) {
+    document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
+    element.classList.add('active');
+
+    if(mode === 'Basic') showPage('basicPage');
+    if(mode === 'Advanced') showPage('advancedPage');
+    if(mode === 'Bot Pro') showPage('botproPage');
+}
+
+function openDeviceControl() { showPage('devicePage'); }
+function openRC() { showPage('rcPage'); }
+function openRGB() { showPage('rgbPage'); }
+function openText() { showPage('textPage'); }
+function openIoT() { showPage('iotPage'); }
+function openSerial() { showPage('serialPage'); }
+
+// NOTIFICATIONS
+
+let notificationTimer;
+
+function showNotification(message) {
+    const box = document.getElementById('notification');
+    box.textContent = message;
+    box.style.display = 'block';
+
+    clearTimeout(notificationTimer);
+    notificationTimer = setTimeout(() => {
+        box.style.display = 'none';
+    }, 2500);
+}
+
+// DEVICE BUTTON ICONS
+
+const icons = {
+    bulb:'💡',
+    fan:'🌀',
+    ac:'❄️',
+    tv:'📺',
+    power:'🔌',
+    socket:'🔋',
+    lamp:'🪔',
+    curtain:'🪟',
+    door:'🚪',
+    lock:'🔒',
+    camera:'📷',
+    speaker:'🔊',
+    music:'🎵',
+    pump:'🚰',
+    heater:'🔥',
+    fridge:'🧊',
+    wash:'🧺',
+    garden:'🌱',
+    car:'🚗',
+    alarm:'⏰'
+};
+
+let buttons = JSON.parse(localStorage.getItem('espButtons')) || [
+    {name:'Bulb', icon:'bulb', on:'LED_ON', off:'LED_OFF'},
+    {name:'Fan', icon:'fan', on:'FAN_ON', off:'FAN_OFF'},
+    {name:'AC', icon:'ac', on:'AC_ON', off:'AC_OFF'},
+    {name:'TV', icon:'tv', on:'TV_ON', off:'TV_OFF'}
+];
+
+let editingIndex = -1;
+let selectedIcon = 'bulb';
+let bluetoothDevice = null;
+let gattServer = null;
+let connectionMode = 'WiFi';
+let wifiEndpoint = localStorage.getItem('wifiEndpoint') || '';
+let longPressTimer;
+let longPressTriggered = false;
+
+// DRAW BUTTONS
+
+function renderButtons() {
+    const grid = document.getElementById('customGrid');
+    grid.innerHTML = '';
+
+    buttons.forEach((b, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'custom-button';
+
+        const symbol = document.createElement('span');
+        symbol.className = 'symbol';
+        symbol.textContent = icons[b.icon] || '⚙️';
+
+        const title = document.createElement('strong');
+        title.textContent = b.name;
+
+        btn.append(symbol, title);
+
+        let startX = 0;
+        let startY = 0;
+
+        btn.addEventListener('pointerdown', (e) => {
+            startX = e.clientX;
+            startY = e.clientY;
+            longPressTriggered = false;
+
+            longPressTimer = setTimeout(() => {
+                longPressTriggered = true;
+                editButton(index);
+            }, 650);
+        });
+
+        btn.addEventListener('pointerup', () => {
+            clearTimeout(longPressTimer);
+            if (!longPressTriggered) {
+                sendCommand(b.on);
+                showNotification(b.name + ' ON');
+            }
+        });
+
+        btn.addEventListener('pointerleave', () => clearTimeout(longPressTimer));
+        btn.addEventListener('pointercancel', () => clearTimeout(longPressTimer));
+
+        btn.addEventListener('contextmenu', e => e.preventDefault());
+
+        // OFF command: double-click
+        btn.addEventListener('dblclick', () => {
+            sendCommand(b.off);
+            showNotification(b.name + ' OFF');
+        });
+
+        grid.appendChild(btn);
+    });
+
+    const add = document.createElement('button');
+    add.className = 'add-button';
+    add.textContent = '+';
+    add.onclick = addNewButton;
+    grid.appendChild(add);
+}
+
+function addNewButton() {
+    editingIndex = -1;
+    document.getElementById('editName').value = 'New Button';
+    document.getElementById('editOn').value = 'ON';
+    document.getElementById('editOff').value = 'OFF';
+    selectedIcon = 'bulb';
+    renderIconPicker();
+    document.getElementById('editModal').style.display = 'flex';
+}
+
+// EDIT BUTTON
+
+function editButton(index) {
+    editingIndex = index;
+    const b = buttons[index];
+
+    document.getElementById('editName').value = b.name;
+    document.getElementById('editOn').value = b.on;
+    document.getElementById('editOff').value = b.off;
+
+    selectedIcon = b.icon;
+    renderIconPicker();
+
+    document.getElementById('editModal').style.display = 'flex';
+}
+
+// ICON PICKER
+
+function renderIconPicker() {
+    const picker = document.getElementById('iconPicker');
+    picker.innerHTML = '';
+
+    Object.keys(icons).forEach(key => {
+        const btn = document.createElement('button');
+        btn.className = 'icon-choice' + (key === selectedIcon ? ' selected' : '');
+        btn.textContent = icons[key];
+        btn.title = key;
+
+        btn.onclick = () => {
+            selectedIcon = key;
+            renderIconPicker();
+        };
+
+        picker.appendChild(btn);
+    });
+}
+
+// SAVE BUTTON
+
+function saveButton() {
+    const newButton = {
+        name: document.getElementById('editName').value.trim(),
+        icon: selectedIcon,
+        on: document.getElementById('editOn').value,
+        off: document.getElementById('editOff').value
+    };
+
+    if (!newButton.name) {
+        showNotification('Enter a button name');
+        return;
+    }
+
+    if (editingIndex === -1) {
+        buttons.push(newButton);
+    } else {
+        buttons[editingIndex] = newButton;
+    }
+
+    localStorage.setItem('espButtons', JSON.stringify(buttons));
+
+    renderButtons();
+    closeModal('editModal');
+    showNotification('Button saved successfully');
+}
+
+// DELETE BUTTON
+
+function deleteButton() {
+    if (editingIndex === -1) {
+        closeModal('editModal');
+        return;
+    }
+
+    buttons.splice(editingIndex, 1);
+    localStorage.setItem('espButtons', JSON.stringify(buttons));
+
+    renderButtons();
+    closeModal('editModal');
+    showNotification('Button deleted');
+}
+
+// CONNECTION
+
+function openConnection() {
+    document.getElementById('connectionModal').style.display = 'flex';
+}
+
+function connectionChanged(mode) {
+    const bt = document.getElementById('bluetoothSwitch');
+    const wifi = document.getElementById('wifiSwitch');
+
+    if (mode === 'Bluetooth' && bt.checked) {
+        wifi.checked = false;
+        connectionMode = 'Bluetooth';
+    } else if (mode === 'WiFi' && wifi.checked) {
+        bt.checked = false;
+        connectionMode = 'WiFi';
+    } else {
+        connectionMode = '';
+    }
+
+    showNotification(connectionMode ? connectionMode + ' selected' : 'Connection disabled');
+}
+
+// BLUETOOTH SCAN
+
+async function scanBluetooth() {
+    if (!navigator.bluetooth) {
+        showNotification('Web Bluetooth is not supported in this browser');
+        return;
+    }
+
+    try {
+        bluetoothDevice = await navigator.bluetooth.requestDevice({
+            acceptAllDevices: true,
+            optionalServices: ['generic_access']
+        });
+
+        document.getElementById('bluetoothStatus').textContent =
+            'Selected: ' + bluetoothDevice.name;
+
+        showNotification('Bluetooth device selected');
+    } catch(error) {
+        showNotification('Bluetooth scan cancelled or unavailable');
+    }
+}
+
+// SHOW PAIRED DEVICES
+
+async function getPairedDevices() {
+    if (!navigator.bluetooth || !navigator.bluetooth.getDevices) {
+        showNotification('Paired device listing is not supported');
+        return;
+    }
+
+    try {
+        const devices = await navigator.bluetooth.getDevices();
+
+        document.getElementById('bluetoothStatus').textContent =
+            devices.length
+            ? devices.map(d => d.name || 'Unnamed device').join(', ')
+            : 'No previously authorized devices found';
+
+    } catch(error) {
+        showNotification(error.message);
+    }
+}
+
+// WIFI CONNECTION
+
+function connectWiFi() {
+    const name = document.getElementById('wifiName').value;
+    const password = document.getElementById('wifiPassword').value;
+
+    if (!name) {
+        showNotification('Enter Wi-Fi network name');
+        return;
+    }
+
+    localStorage.setItem('wifiName', name);
+    localStorage.setItem('wifiPassword', password);
+
+    showNotification('Wi-Fi details saved. Configure ESP8266 firmware to connect.');
+}
+
+// COMMAND SENDING
+
+async function sendCommand(command) {
+    if (!command) return;
+
+    const output = document.getElementById('serialOutput');
+
+    if (output) {
+        output.textContent += '\n> ' + command;
+    }
+
+    if (connectionMode === 'WiFi') {
+        const endpoint = wifiEndpoint || document.getElementById('deviceIP')?.value;
+
+        if (endpoint) {
+            try {
+                const url = new URL(endpoint);
+                url.searchParams.set('cmd', command);
+
+                const response = await fetch(url, {
+                    method: 'GET'
+                });
+
+                if (!response.ok) throw new Error('HTTP ' + response.status);
+
+                showNotification('Command sent successfully');
+            } catch(error) {
+                showNotification('Wi-Fi error: ' + error.message);
+            }
+        } else {
+            showNotification('Set ESP8266 Wi-Fi endpoint first');
+        }
+
+    } else if (connectionMode === 'Bluetooth') {
+        showNotification('Bluetooth command needs a configured BLE GATT service');
+
+    } else {
+        showNotification('Select Bluetooth or Wi-Fi connection first');
+    }
+}
+
+// SETTINGS
+
+function openSettings() {
+    document.getElementById('siteName').value =
+        localStorage.getItem('siteName') || 'ESP8266 WI FI';
+
+    document.getElementById('sheetURL').value =
+        localStorage.getItem('sheetURL') || '';
+
+    document.getElementById('settingsEndpoint').value = wifiEndpoint;
+
+    document.getElementById('settingsModal').style.display = 'flex';
+}
+
+function saveSettings() {
+    const name = document.getElementById('siteName').value;
+    const sheet = document.getElementById('sheetURL').value;
+    const endpoint = document.getElementById('settingsEndpoint').value;
+
+    localStorage.setItem('siteName', name);
+    localStorage.setItem('sheetURL', sheet);
+    localStorage.setItem('wifiEndpoint', endpoint);
+
+    wifiEndpoint = endpoint;
+
+    document.querySelector('.logo h2').textContent = name;
+
+    const ip = document.getElementById('deviceIP');
+    if (ip && endpoint) ip.value = endpoint;
+
+    closeModal('settingsModal');
+    showNotification('Settings saved');
+}
+
+// GOOGLE SHEETS
+
+function openSheet() {
+    const url = localStorage.getItem('sheetURL');
+
+    if (!url) {
+        showNotification('Add your Google Sheets URL in Settings');
+        openSettings();
+        return;
+    }
+
+    try {
+        const validURL = new URL(url);
+        if (!['http:', 'https:'].includes(validURL.protocol)) throw new Error();
+        window.open(validURL.href, '_blank', 'noopener');
+    } catch(error) {
+        showNotification('Please enter a valid Google Sheets URL');
+    }
+}
+
+// MODALS
+
+function closeModal(id) {
+    document.getElementById(id).style.display = 'none';
+}
+
+// INITIALIZE
+
+renderButtons();
+
+document.querySelector('.logo h2').textContent =
+    localStorage.getItem('siteName') || 'ESP8266 WI FI';
+
+document.getElementById('bluetoothSwitch').checked = false;
+document.getElementById('wifiSwitch').checked = false;
+
+</script>
+
+</body>
+</html>
